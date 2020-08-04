@@ -1,19 +1,25 @@
-ansible-freebsd-modules
-=======================
+# ansible-freebsd-modules
 
 Ansible Modules for FreeBSD
 
-## kld
+## Testing
+
+Testing requires Molecule, Vagrant & Virtualbox. 
+
+## Module :: kld
 
 Loads the given kernel module, or puts it in the /boot/loader.conf
 
-Accepts the following options
+### Parameters
 
-- **name** The name of the kernel module. .ko is typically not needed
-- **load** Load or unload the module. Default: True
-- **boot** Apply the kernel module at boot. Default: True
+| Parameter | Choices/Defaults | Comments |
+| :-------- | :--------------- | :----- |
+| name      | | Name of the kernel module. .ko is typically not needed |
+| load      | Default: True | Load or unload the module |
+| boot      | Default: True | Apply the kernel module at boot. |
 
-#### example
+### Examples
+
 ```yaml
 ---
 # Adds accf_http to the bootloader and loads it
@@ -26,19 +32,23 @@ Accepts the following options
     boot: false
 ```
 
-#### sysrc
+## sysrc
 
 Uses [sysrc(8)](https://www.freebsd.org/cgi/man.cgi?query=sysrc) to set a sys var in /etc/rc.conf (default) or the given
-$dest file
+`$dest` file
 
-Accepts the following options
+### Parameters
 
-- **name** The name of the variable
-- **value** The value of the variable
-- **state** Whether the var should be present or absent
-- **dest**  What file to add this value to
+| Parameter | Choices/Defaults | Comments |
+| :-------- | :--------------- | :----- |
+| dest      | | The file to modify |
+| delim     | ` ` | Delimiter. Used with append/subtract |
+| name      | | Name of the variable to manage<br><strong>NOTE</strong>: cannot use `.` (periods) as sysrc doesn't support OID style names |
+| value     | | Required when not `state=absent` |
+| state     | **Choices**: <ul><li>append<li>absent</li><li>**present**</li><li>subtract</li></ul> | Whether the var should be appended, substracted, exist, or not exist. |
 
-#### example
+### Examples
+
 ```yaml
 ---
 # enable mysql in the /etc/rc.conf
